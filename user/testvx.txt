@@ -1,0 +1,83 @@
+import qrcode
+import requests
+import hashlib
+import time
+import xml.etree.ElementTree as ET
+
+# 配置项（请替换为真实信息）
+APP_ID = "你的 AppID"
+MCH_ID = "你的商户号"
+API_KEY = "你的 API 密钥"
+NOTIFY_URL = "https://你的域名/notify"
+TOTAL_FEE = 100  # 金额单位：分
+OUT_TRADE_NO = f"ORDER_{int(time.time())}"
+
+def generate_sign(params):
+    string_A = "&".join([f"{k}={params[k]}" for k in sorted(params.keys())])
+    sign_str = f"{string_A}&key={API_KEY}"
+    return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()
+
+def get_payment_code_url():
+    params = {
+        "appid": APP_ID, "mch_id": MCH_ID, "nonce_str": f"{int(time.time())}",
+        "body": "商品描述", "out_trade_no": OUT_TRADE_NO, "total_fee": TOTAL_FEE,
+        "spbill_create_ip": "127.0.0.1", "notify_url": NOTIFY_URL, "trade_type": "NATIVE"
+    }
+    params["sign"] = generate_sign(params)
+    # 构建 XML 请求体
+    xml_body = "<xml>" + "".join([f"<{k}>{v}</{k}>" for k, v in params.items()]) + "</xml>"
+    
+    resp = requests.post("https://api.mch.weixin.qq.com/pay/unifiedorder", data=xml_body.encode('utf-8'))
+    root = ET.fromstring(resp.content)
+    if root.find('return_code').text == 'SUCCESS':
+        return root.find('code_url').text
+    raise Exception(f"API 失败：{root.find('return_msg').text}")
+
+def save_qrcode(code_url, filename="wx_pay.png"):
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+    qr.add_data(code_url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white").convert('RGB')
+    img.save(filename)
+    print(f"已保存：{filename}")
+
+# 执行流程
+try:
+    url = get_payment_code_url()
+    save_qrcode(url)
+except Exception as e:
+    print(f"生成失败：{e}")
+```‌‌:ml-citation{ref="2,4" appearance="aggregated" data="citationList"}
+
+### 场景二：个人静态收款码（无 API 权限）
+个人无法通过 API 生成带金额的动态码，只能复用微信 App 生成的固定码。
+
+1. &zwnj;**获取源素材**&zwnj;：微信 App → 我 → 服务 → 收付款 → 我要收款 → 点击右上角"…" → 保存图片（或复制链接，若支持）。
+2. &zwnj;**Python 处理（可选）**&zwnj;：若已有二维码图片，可用代码重绘以美化或添加 Logo；若只有链接（部分版本支持），直接生成。
+   - &zwnj;**重绘优化示例**&zwnj;：
+     ```python
+     import qrcode
+     from PIL import Image
+
+     # 方法 A：如果你手动复制了微信收款页面的长链接（如有）
+     # qr = qrcode.make("https://wxpay.wxutil.com/...") 
+     
+     # 方法 B：读取已保存的微信原图（需先确保是二维码格式），重新生成以提高清晰度
+     # 注意：直接对原图做图像处理无法改变其编码内容，此处仅为演示标准生成逻辑
+     data = "此处填入你从微信获取的收款链接或标识符" 
+     qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10, border=4)
+     qr.add_data(data)
+     qr.make(fit=True)
+     img = qr.make_image(fill_color="#07C160", back_color="white").convert('RGB') # 微信绿
+     img.save("my_wechat_pay.png")
+     ```
+   - &zwnj;**重要提示**&zwnj;：个人码通常无公开 URL 链接，多为图片形式，Python 无法逆向提取链接重新生成，仅能做图片拼接或 Logo 添加等美化操作 。‌‌:ml-citation{ref="1,6" appearance="aggregated" data="citationList"}
+
+### 关键注意事项
+- &zwnj;**合规风险**&zwnj;：严禁利用技术手段伪造他人收款码或进行非法聚合支付（二清），个人码用于经营性收款可能违反央行规定 。
+- &zwnj;**安全性**&zwnj;：商户密钥 (`API_KEY`) 绝不可硬编码在代码中提交至公开仓库，需使用环境变量管理。
+- &zwnj;**识别率**&zwnj;：生成时建议设置 `error_correction=qrcode.constants.ERROR_CORRECT_M` 或 `H`，确保微信扫描成功率 。‌‌:ml-citation{ref="5,1" appearance="aggregated" data="citationList"}
+
+:::ml-data{name=citationList}
+```json
+[{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"40 行 Python 代码搞定:兼容微信的二维码生成与识别全流程","thumbnail":"http://t8.baidu.com/it/u=2155760749,429444140&fm=217&app=126&f=JPEG?w=675&h=553&s=1AE1E1485BA4B36C4655040F0300E0CB","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/wanhuiba3269/article/details/150105095","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"1\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3385518650,4195902768&fm=195&app=88&f=JPEG?w=200&h=200","name":"51CTO博客"},"isVideo":false,"title":"python 生成微信收款码","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.51cto.com/u_16213380/12787491","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"2\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"【开源工具】如何用Python打造支付宝微信二合一收款码?技术原理+完整实现","thumbnail":"http://t9.baidu.com/it/u=209407018,3151656070&fm=217&app=126&f=PNG?w=224&h=224&s=2B011B6EC5A3A4B62D895459020050D0","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/Clay_K/article/details/147481200","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"3\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3385518650,4195902768&fm=195&app=88&f=JPEG?w=200&h=200","name":"51CTO博客"},"isVideo":false,"title":"python生成微信收款码","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.51cto.com/u_16213317/7416844","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"4\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"python实现微信支付宝付款聚合码程序","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/cnds123/article/details/161458270","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"5\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"微信二维码丑到不敢发?3行Python代码生成“会说话”的二维码!-CSDN博客","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/weixin_52208686/article/details/159165251","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"6\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"【开源工具】如何用Python打造支付宝微信二合一收款码?技术原理+完整实现","thumbnail":"http://t9.baidu.com/it/u=209407018,3151656070&fm=217&app=126&f=PNG?w=224&h=224&s=2B011B6EC5A3A4B62D895459020050D0","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/Clay_K/article/details/147481200","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"7\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3385518650,4195902768&fm=195&app=88&f=JPEG?w=200&h=200","name":"51CTO博客"},"isVideo":false,"title":"python生成微信收款码 python制作微信","thumbnail":"http://t8.baidu.com/it/u=375302222,1230135411&fm=217&app=126&f=JPEG?w=761&h=763&s=C0310D70011FD1CE5EFC00DE0300C0B1","linkInfo":{"data-click-info":"{}","href":"https://blog.51cto.com/u_14987/7488628","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"8\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"[特殊字符] 小白从零实现 Python 微信支付:扫码支付全流程实战与避坑指南","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/hussarbbs1/article/details/147517785","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"9\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"Python实现微信支付(Jsapi和微信扫码)","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/m0_38076876/article/details/98481772","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"10\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"用qrcode生成微信支付二维码","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/11bghkd94u","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"11\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"微信小程序使用qrcode生成二维码(可用于微信收款)","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/MMQFQ/article/details/126938196","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"12\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://b.bdstatic.com/searchbox/mappconsole/image/20190429/a68f8bb8-95b8-406a-8463-b6d029c66170.jpg","name":"搜狐新闻"},"isVideo":false,"title":"如何快速生成微信收款码的详细步骤解析 ","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://news.sohu.com/a/827483904_122077424","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"13\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"用qrcode生成微信支付二维码","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/qq_43717742/article/details/128631308","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"14\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://b.bdstatic.com/searchbox/mappconsole/image/20181211/6bedd451-2436-4335-8b94-048a2158c76a.jpg","name":"百度经验"},"isVideo":false,"title":"微信收款二维码生成","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://jingyan.baidu.com/article/76a7e409d6c646fc3b6e15e9.html","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"15\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"isVideo":false,"title":"【免费下载】 推荐开源项目:OneQRCode - 一键生成微信、支付宝、QQ三合一收款二维码","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://blog.csdn.net/gitblog_00056/article/details/139166799","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"16\",\"component_content\":{\"component_name\":\"reference\"}}"}}]
