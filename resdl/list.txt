@@ -1,12 +1,12 @@
-OpenRAYR|https://whwenxin.13871013111.com/resdl/base.zip
-OpenRAYR/mods/all|https://whwenxin.13871013111.com/resdl/mods_all.zip
-OpenRAYR/mods/cnc|https://whwenxin.13871013111.com/resdl/mods_cnc.zip
-OpenRAYR/mods/common|https://whwenxin.13871013111.com/resdl/mods_common.zip
-OpenRAYR/mods/d2k|https://whwenxin.13871013111.com/resdl/mods_d2k.zip
-OpenRAYR/mods/modcontent|https://whwenxin.13871013111.com/resdl/mods_modcontent.zip
-OpenRAYR/mods/ra|https://whwenxin.13871013111.com/resdl/mods_ra.zip
-OpenRAYR/mods/ts|https://whwenxin.13871013111.com/resdl/mods_ts.zip
-OpenRAYR/mods/yr|https://whwenxin.13871013111.com/resdl/mods_yr.zip
-OpenRAYR/Content/ra|https://whwenxin.13871013111.com/resdl/Content_ra.zip
-OpenRAYR/Content/yr|https://whwenxin.13871013111.com/resdl/Content_yr.zip.001|https://whwenxin.13871013111.com/resdl/Content_yr.zip.002|https://whwenxin.13871013111.com/resdl/Content_yr.zip.003|https://whwenxin.13871013111.com/resdl/Content_yr.zip.004|https://whwenxin.13871013111.com/resdl/Content_yr.zip.005|https://whwenxin.13871013111.com/resdl/Content_yr.zip.006|https://whwenxin.13871013111.com/resdl/Content_yr.zip.007|https://whwenxin.13871013111.com/resdl/Content_yr.zip.008
+OpenRAYR|http://whwenxin.13871013111.com/resdl/base.zip
+OpenRAYR/mods/all|http://whwenxin.13871013111.com/resdl/mods_all.zip
+OpenRAYR/mods/cnc|http://whwenxin.13871013111.com/resdl/mods_cnc.zip
+OpenRAYR/mods/common|http://whwenxin.13871013111.com/resdl/mods_common.zip
+OpenRAYR/mods/d2k|http://whwenxin.13871013111.com/resdl/mods_d2k.zip
+OpenRAYR/mods/modcontent|http://whwenxin.13871013111.com/resdl/mods_modcontent.zip
+OpenRAYR/mods/ra|http://whwenxin.13871013111.com/resdl/mods_ra.zip
+OpenRAYR/mods/ts|http://whwenxin.13871013111.com/resdl/mods_ts.zip
+OpenRAYR/mods/yr|http://whwenxin.13871013111.com/resdl/mods_yr.zip
+OpenRAYR/Content/ra|http://whwenxin.13871013111.com/resdl/Content_ra.zip
+OpenRAYR/Content/yr|http://whwenxin.13871013111.com/resdl/Content_yr.zip.001|http://whwenxin.13871013111.com/resdl/Content_yr.zip.002|http://whwenxin.13871013111.com/resdl/Content_yr.zip.003|http://whwenxin.13871013111.com/resdl/Content_yr.zip.004|http://whwenxin.13871013111.com/resdl/Content_yr.zip.005|http://whwenxin.13871013111.com/resdl/Content_yr.zip.006|http://whwenxin.13871013111.com/resdl/Content_yr.zip.007|http://whwenxin.13871013111.com/resdl/Content_yr.zip.008
 
