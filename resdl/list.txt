@@ -1,18 +1,12 @@
-sdcard\OpenRAYR base.zip
-sdcard\OpenRAYR\mods\all mods_all.zip
-sdcard\OpenRAYR\mods\cnc mods_cnc.zip
-sdcard\OpenRAYR\mods\common mods_common.zip
-sdcard\OpenRAYR\mods\d2k mods_d2k.zip
-sdcard\OpenRAYR\mods\modcontent mods_modcontent.zip
-sdcard\OpenRAYR\mods\ra mods_ra.zip
-sdcard\OpenRAYR\mods\ts mods_ts.zip
-sdcard\OpenRAYR\mods\yr mods_yr.zip
-sdcard\OpenRAYR\Content\ra Content_ra.zip
-sdcard\OpenRAYR\Content\yr Content_yr.zip.001
-sdcard\OpenRAYR\Content\yr Content_yr.zip.002
-sdcard\OpenRAYR\Content\yr Content_yr.zip.003
-sdcard\OpenRAYR\Content\yr Content_yr.zip.004
-sdcard\OpenRAYR\Content\yr Content_yr.zip.005
-sdcard\OpenRAYR\Content\yr Content_yr.zip.006
-sdcard\OpenRAYR\Content\yr Content_yr.zip.007
-sdcard\OpenRAYR\Content\yr Content_yr.zip.008
+OpenRAYR|https://whwenxin.13871013111.com/resdl/base.zip
+OpenRAYR/mods/all|https://whwenxin.13871013111.com/resdl/mods_all.zip
+OpenRAYR/mods/cnc|https://whwenxin.13871013111.com/resdl/mods_cnc.zip
+OpenRAYR/mods/common|https://whwenxin.13871013111.com/resdl/mods_common.zip
+OpenRAYR/mods/d2k|https://whwenxin.13871013111.com/resdl/mods_d2k.zip
+OpenRAYR/mods/modcontent|https://whwenxin.13871013111.com/resdl/mods_modcontent.zip
+OpenRAYR/mods/ra|https://whwenxin.13871013111.com/resdl/mods_ra.zip
+OpenRAYR/mods/ts|https://whwenxin.13871013111.com/resdl/mods_ts.zip
+OpenRAYR/mods/yr|https://whwenxin.13871013111.com/resdl/mods_yr.zip
+OpenRAYR/Content/ra|https://whwenxin.13871013111.com/resdl/Content_ra.zip
+OpenRAYR/Content/yr|https://whwenxin.13871013111.com/resdl/Content_yr.zip.001|https://whwenxin.13871013111.com/resdl/Content_yr.zip.002|https://whwenxin.13871013111.com/resdl/Content_yr.zip.003|https://whwenxin.13871013111.com/resdl/Content_yr.zip.004|https://whwenxin.13871013111.com/resdl/Content_yr.zip.005|https://whwenxin.13871013111.com/resdl/Content_yr.zip.006|https://whwenxin.13871013111.com/resdl/Content_yr.zip.007|https://whwenxin.13871013111.com/resdl/Content_yr.zip.008
+
