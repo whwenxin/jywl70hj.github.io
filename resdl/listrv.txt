@@ -1,4 +1,4 @@
-OpenRA|http://192.168.43.8:3923/reshdl/rv/base.zip
+OpenRA|http://192.168.43.8:3923/resdl/rv/base.zip
 OpenRA/en|http://192.168.43.8:3923/resdl/rv/en.zip
 OpenRA/glsl|http://192.168.43.8:3923/resdl/rv/glsl.zip
 OpenRA/mods/all|http://192.168.43.8:3923/resdl/rv/mods_all.zip
